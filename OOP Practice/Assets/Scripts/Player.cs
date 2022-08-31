@@ -31,11 +31,16 @@ public class Player : MonoBehaviour
         GetMove();
 
         GetTurn();
+
+        if (Input.GetKeyDown(KeyCode.Mouse0))
+        {
+            Shoot();
+        }
     }
 
     void FixedUpdate()
     {
-        rb.MovePosition(rb.position + new Vector3(horizontal, 0, vertical) * Time.fixedDeltaTime * 10);
+        rb.MovePosition(rb.position + (transform.right * horizontal + transform.forward * vertical) * Time.fixedDeltaTime * 10);
 
         rb.MoveRotation(rb.rotation * Quaternion.Euler(0, mouseX * Time.fixedDeltaTime * 50, 0));
     }
@@ -58,5 +63,15 @@ public class Player : MonoBehaviour
         look = Mathf.Clamp(look, -85, 85);
 
         cam.localRotation = Quaternion.Euler(look, 0, 0);
+    }
+
+    void Shoot()
+    {
+        RaycastHit hit;
+
+        if (Physics.Raycast(cam.position, transform.TransformDirection(Vector3.forward), out hit, 100, 1 << 3))
+        {
+
+        }
     }
 }
