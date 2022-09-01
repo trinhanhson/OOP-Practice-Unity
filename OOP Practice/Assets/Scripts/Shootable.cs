@@ -31,7 +31,7 @@ public class Shootable : MonoBehaviour
         health -= 1;
         if (health == 0)
         {
-            GameManager.Instance.score += 1;
+            GameManager.Instance.Score += 1;
 
             Destroy(gameObject);
         }

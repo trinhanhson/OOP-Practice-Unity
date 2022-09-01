@@ -13,4 +13,9 @@ public class Heal : Shootable
             rb.AddTorque(Vector3.one * 5, ForceMode.VelocityChange);
         }
     }
+
+    void OnDestroy()
+    {
+        GameManager.Instance.player.UpdateHealth(1);
+    }
 }

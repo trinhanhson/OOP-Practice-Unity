@@ -1,9 +1,14 @@
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
+using UnityEngine.UI;
 
 public class Player : MonoBehaviour
 {
+    [SerializeField] Text healthText;
+
+    public int health;
+
     private Rigidbody rb;
 
     private float horizontal;
@@ -24,6 +29,8 @@ public class Player : MonoBehaviour
         Cursor.lockState = CursorLockMode.Locked;
 
         Cursor.visible = false;
+
+        healthText.text = "Health: " + health;
     }
 
     void Update()
@@ -51,6 +58,11 @@ public class Player : MonoBehaviour
 
         vertical = Input.GetAxis("Vertical");
 
+        if (transform.position.y <= -10)
+        {
+            GameManager.Instance.Lose();
+        }
+
     }
 
     void GetTurn()
@@ -69,9 +81,29 @@ public class Player : MonoBehaviour
     {
         RaycastHit hit;
 
-        if (Physics.Raycast(cam.position, transform.TransformDirection(Vector3.forward), out hit, 100, 1 << 3))
+        if (Physics.Raycast(cam.position, cam.TransformDirection(Vector3.forward), out hit, 1000, 1 << 3))
         {
+            hit.collider.GetComponent<Shootable>().Damage();
+        }
+    }
 
+    void OnCollisionEnter(Collision collision)
+    {
+        if (collision.gameObject.CompareTag("Shootable"))
+        {
+            UpdateHealth(-1);
+        }
+    }
+
+    public void UpdateHealth(int value)
+    {
+        health += value;
+
+        healthText.text = "Health: " + health;
+
+        if (health <= 0)
+        {
+            GameManager.Instance.Lose();
         }
     }
 }
